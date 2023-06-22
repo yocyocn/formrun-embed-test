@@ -49,7 +49,11 @@
   const KEY = 'last_display_url';
 
   const loadLocalStorage = () => {
-    document.querySelector('#iframe_url').value = window.localStorage.getItem(KEY);
+    url = window.localStorage.getItem(KEY);
+    if (!!url) { return; }
+
+    document.querySelector('#iframe_url').value = url
+    document.querySelector('#target_iframe').src = url
   }
 
   const urlChangeEvent = () => {
