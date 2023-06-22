@@ -49,9 +49,6 @@
   const KEY = 'last_display_url';
 
   const loadLocalStorage = () => {
-    if (document.querySelector('#iframe_url').value !== '') {
-      return;
-    }
     document.querySelector('#iframe_url').value = window.localStorage.getItem(KEY);
   }
 
