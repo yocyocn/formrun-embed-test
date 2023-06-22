@@ -50,7 +50,7 @@
 
   const loadLocalStorage = () => {
     url = window.localStorage.getItem(KEY);
-    if (!!url) { return; }
+    if (!url) { return; }
 
     document.querySelector('#iframe_url').value = url
     document.querySelector('#target_iframe').src = url
