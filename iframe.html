@@ -58,6 +58,10 @@
 
   const urlChangeEvent = () => {
     url = document.querySelector('#iframe_url').value
+    if (!url.match(/^https?:\/\//)) {
+      window.alert('URLを入力してください')
+      return;
+    }
     window.localStorage.setItem(KEY, url);
     document.querySelector('#target_iframe').src = url
   }
