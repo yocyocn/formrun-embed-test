@@ -44,12 +44,13 @@
       </iframe>
     </div>
   </div>
+
 </body>
 <script>
   const KEY = 'last_display_url';
 
   const loadLocalStorage = () => {
-    url = window.localStorage.getItem(KEY);
+    const url = window.localStorage.getItem(KEY);
     if (!url) { return; }
 
     document.querySelector('#iframe_url').value = url
@@ -57,7 +58,7 @@
   }
 
   const urlChangeEvent = () => {
-    url = document.querySelector('#iframe_url').value
+    const url = document.querySelector('#iframe_url').value
     if (!url.match(/^https?:\/\//)) {
       window.alert('URLを入力してください')
       return;
