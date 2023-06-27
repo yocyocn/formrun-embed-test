@@ -89,6 +89,7 @@
     const embedData = extractEmbedData(inputtedScript);
     if (!embedData) {
       window.alert('不正なスクリプトです');
+      return;
     }
 
     window.localStorage.setItem(KEY, inputtedScript);
