@@ -100,12 +100,11 @@
     appendDivTag(displayArea, embedData.friendly_key);
   }
 
-
   const onloadEvent = () => {
     loadLocalStorage();
     document.querySelector('#change_page_btn').addEventListener('click', replaceEmbedForm);
-
   }
+
   window.addEventListener('load', onloadEvent);
 
 </script>

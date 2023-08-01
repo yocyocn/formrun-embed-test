@@ -12,27 +12,41 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
     integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
     crossorigin="anonymous"></script>
-    <script src="https://sdk-stg.form.run/js/v2/formrun.js"></script>
+  <script src="https://sdk-stg.form.run/js/v2/formrun.js"></script>
   <style>
     body {
-      /* background-color: blanchedalmond; */
-      margin: 10px;
-    }
-
-    .formrun-embed {
-      width: 50%;
-      margin-bottom: 20px;
-    }
-
-    iframe {
-      width: 50%;
-      height: 500px;
+      margin: 50px;
     }
   </style>
   <title>code</title>
 </head>
 
 <body>
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="card mb-3">
+        <div class="card-body">
+          <h2>
+            埋め込みに必要な情報
+          </h2>
+          <div class="form-group">
+            <label>FormタグのactionのURL</label>
+            <input name="action" type="text" class="form-control" id="action_url"
+              placeholder="https://form.run/api/v1/r/fuomni12q5wpzyzprru3mas9">
+          </div>
+
+          <div class="form-group">
+            <label>スクリプト設置タグ</label>
+            <input name="script" type="text" class="form-control" id="script_tag"
+              placeholder="&lt;script src=&quot;https://sdk.form.run/js/v2/formrun.js&quot;&gt;&lt;/script&gt;">
+          </div>
+
+          <button class="btn btn-primary mt-3" id="embed_form_info">埋め込み</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="row">
     <div class="col-sm-6">
       <h1>
@@ -43,48 +57,188 @@
 
   <div class="row">
     <div class="col-sm-6">
-      <form class="formrun" action="https://stg.form.run/api/v1/r/vcgr3kaqxb5bsvj98v3uxo67" method="post" data-formrun-saving="true">
-        <!-- ↓自由に要素を追加・編集することができます -->
-        <div class="form-group">
-          <label>お名前</label>
-          <input name="お名前" type="text" class="form-control">
+      <form class="formrun" method="post" data-formrun-saving="true" data-formrun-confirm="true">
+
+        <div class="card mb-3">
+          <div class="card-body">
+
+            <h3>
+              コード設置画面サンプルコード
+            </h3>
+            <!-- ↓自由に要素を追加・編集することができます -->
+            <div class="form-group">
+              <label>お名前</label><span class="badge bg-secondary text-white">任意</span>
+              <input name="お名前1" type="text" class="form-control">
+            </div>
+
+            <div class="form-group">
+              <label>メールアドレス</label><span class="badge bg-danger text-white">必須</span>
+              <input name="メールアドレス1" type="text" data-formrun-type="email" class="form-control" data-formrun-required>
+              <div data-formrun-show-if-error="メールアドレス1" class="text-danger">メールアドレスを正しく入力してください</div>
+            </div>
+
+            <div class="form-group">
+              <label>お問い合わせ</label><span class="badge bg-danger text-white">必須</span>
+              <textarea name="お問い合わせ" class="form-control" data-formrun-required></textarea>
+              <div data-formrun-show-if-error="お問い合わせ" class="text-danger">お問い合わせ入力してください</div>
+            </div>
+
+            <div class="form-group form-group">
+              <div><label>個人情報利用同意</label><span class="badge bg-danger text-white">必須</span></div>
+              <input type="checkbox" name="個人情報利用同意" class="form-check-label" data-formrun-required>
+              <div data-formrun-show-if-error="個人情報利用同意" class="text-danger">同意してください</div>
+            </div>
+
+            <!-- ボット投稿をブロックするためのタグ -->
+            <div class="_formrun_gotcha form-group form-check">
+              <style media="screen">
+                ._formrun_gotcha {
+                  position: absolute !important;
+                  height: 1px;
+                  width: 1px;
+                  overflow: hidden;
+                }
+              </style>
+              <label for="_formrun_gotcha" class="form-check-label">If you are a human, ignore this field</label>
+              <input type="text" name="_formrun_gotcha" id="_formrun_gotcha" tabindex="-1" class="form-check-input">
+            </div>
+          </div>
         </div>
 
-        <div class="form-group">
-          <label>メールアドレス</label><span class="badge bg-danger text-white">必須</span>
-          <input name="メールアドレス" type="text" data-formrun-type="email" data-formrun-required class="form-control">
-          <div data-formrun-show-if-error="メールアドレス" class="text-danger">メールアドレスを正しく入力してください</div>
+        <div class="card mb-3">
+          <div class="card-body">
+
+            <h3>
+              バリデーション
+            </h3>
+
+            <div class="form-group">
+              <label>電話番号バリデーション</label><span class="badge bg-secondary text-white">任意</span>
+              <input name="電話番号バリデーション" type="text" data-formrun-type="tel" class="form-control">
+              <div data-formrun-show-if-error="電話番号バリデーション" class="text-danger">電話番号形式で入力してください</div>
+            </div>
+
+            <div class="form-group">
+              <label>電話番号の入力最大桁数を設定</label><span class="badge bg-secondary text-white">任意</span>
+              <input name="電話番号バリデーション2" type="text" data-formrun-type="tel" data-formrun-chars-max="10"
+                class="form-control">
+              <div data-formrun-show-if-error="電話番号バリデーション2" class="text-danger">電話番号形式で入力してください（最大桁数は10桁です）</div>
+            </div>
+
+            <div class="form-group">
+              <label>メールアドレス</label><span class="badge bg-secondary text-white">任意</span>
+              <input name="メールアドレス2" type="text" data-formrun-type="email" class="form-control">
+              <div data-formrun-show-if-error="メールアドレス2" class="text-danger">メールアドレスを正しく入力してください</div>
+            </div>
+
+            <div class="form-group">
+              <label>メールアドレス再入力</label><span class="badge bg-secondary text-white">任意</span>
+              <input name="メールアドレス_confirm" type="text" data-formrun-type="email_confirmation"
+                data-formrun-confirmed-name="メールアドレス2" class="form-control">
+              <div data-formrun-show-if-error="メールアドレス_confirm" class="text-danger">メールアドレスが一致しません</div>
+            </div>
+
+            <div class="form-group">
+              <label>数字バリデーション</label><span class="badge bg-secondary text-white">任意</span>
+              <input name="個数" type="number" data-formrun-type="number" max="100" min="-100" class="form-control">
+              <div data-formrun-show-if-error="個数" class="text-danger">100から-100の間で指定してください</div>
+            </div>
+
+            <div class="form-group">
+              <label>必須バリデーション</label><span class="badge bg-danger text-white">必須</span>
+              <input name="お名前2" type="text" class="form-control" data-formrun-required>
+              <div data-formrun-show-if-error="お名前2" class="text-danger">この項目は必須です</div>
+            </div>
+
+            <div class="form-group">
+              <label>郵便番号による住所補完と都道府県タグの自動設定</label><span class="badge bg-secondary text-white">任意</span>
+              <!-- マークアップ例2 (住所を複数フィールドに分割する場合) -->
+              <div class="ml-3">
+                <label>郵便番号</label>
+                <input type="text" name="郵便番号" data-formrun-type="postal-code-jp" class="form-control">
+                <label>都道府県</label>
+                <select name="都道府県" data-formrun-type="region prefecture-jp" data-formrun-type="region"
+                  class="form-control"></select>
+                <label>市区町村</label>
+                <input type="text" name="市区町村" data-formrun-type="locality street-address" class="form-control">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>項目にエラーがない場合に要素を表示する(動作しない)</label><span class="badge bg-danger text-white">必須</span>
+              <input name="お名前3" type="text" class="form-control" data-formrun-required>
+              <div data-formrun-show-if-success="お名前3" class="text-success">入力OK！</div>
+              <img src="" data-formrun-show-if-success="お名前3" />
+              <div data-formrun-show-if-error="お名前3" class="text-danger">この項目は必須です</div>
+            </div>
+
+            <div class="form-group">
+              <label>電話番号の入力最小桁数を設定</label><span class="badge bg-secondary text-white">任意</span>
+              <input name="電話番号バリデーション3" type="text" data-formrun-type="tel" data-formrun-chars-min="4"
+                class="form-control">
+              <div data-formrun-show-if-error="電話番号バリデーション3" class="text-danger">電話番号形式で入力してください（最小桁数は5桁です）</div>
+            </div>
+
+          </div>
         </div>
 
-        <div class="form-group">
-          <label>お問い合わせ</label><span class="badge bg-danger text-white">必須</span>
-          <textarea name="お問い合わせ" data-formrun-required  class="form-control"></textarea>
-          <div data-formrun-show-if-error="お問い合わせ" class="text-danger">お問い合わせ入力してください</div>
-        </div>
+        <div data-formrun-hide-if-confirm>データを入力して確認ボタンを押してください。</div>
 
-        <div class="form-group form-group">
-          <div><label>個人情報利用同意</label><span class="badge bg-danger text-white">必須</span></div>
-          <input type="checkbox" name="個人情報利用同意" data-formrun-required  class="form-check-label">
-          <div data-formrun-show-if-error="個人情報利用同意" class="text-danger">同意してください</div>
-        </div>
+        <div data-formrun-show-if-confirm>データを確認の上送信してください</div>
 
-        <!-- ボット投稿をブロックするためのタグ -->
-        <div class="_formrun_gotcha form-group form-check">
-          <style media="screen">
-            ._formrun_gotcha {
-              position: absolute !important;
-              height: 1px;
-              width: 1px;
-              overflow: hidden;
-            }
-          </style>
-          <label for="_formrun_gotcha" class="form-check-label">If you are a human, ignore this field</label>
-          <input type="text" name="_formrun_gotcha" id="_formrun_gotcha" tabindex="-1" class="form-check-input">
-        </div>
-
-        <button type="submit" class="btn btn-primary" data-formrun-error-text="未入力の項目があります"
-          data-formrun-submitting-text="送信中...">送信</button>
+        <a href="javascript:void(0)" class="btn btn-secondary" data-formrun-back-button>戻る</a>
+        <button type="submit" class="btn btn-primary" data-formrun-invalid-input-error-text="正しく入力されていない項目があります"
+          data-formrun-error-text="未入力の項目があります" data-formrun-submitting-text="送信中...">確認</button>
       </form>
     </div>
   </div>
 </body>
+
+<script id="formrun_js_script"></script>
+
+<script>
+  const KEY_ACTION_URL = 'last_display_action_url';
+  const KEY_SCRIPT_TAG = 'last_display_script_tag';
+
+
+  const loadLocalStorage = () => {
+    const actionUrl = window.localStorage.getItem(KEY_ACTION_URL);
+    const script = window.localStorage.getItem(KEY_SCRIPT_TAG);
+    if (!actionUrl || !script) { return; }
+
+    document.querySelector('form.formrun').action = actionUrl
+    document.querySelector('#action_url').value = actionUrl
+
+    document.querySelector('#formrun_js_script').src = extractSourceUrl(script)
+    document.querySelector('#script_tag').value = script
+
+  }
+
+  const extractSourceUrl = (tag) => {
+    const sourceUrl = tag.match(/script src="(https:\/\/.+.formrun.js)"/);
+    return !!sourceUrl ? sourceUrl[1] : null;
+  }
+
+  const embedFormInfo = () => {
+    const actionUrl = document.querySelector('#action_url').value;
+    const scriptTag = document.querySelector('#script_tag').value;
+    const sourceUrl =  extractSourceUrl(scriptTag);
+
+    if(!sourceUrl){
+      window.alert('不正なスクリプトです');
+      return;
+    }
+    window.localStorage.setItem(KEY_ACTION_URL, actionUrl);
+    window.localStorage.setItem(KEY_SCRIPT_TAG, scriptTag);
+
+    document.querySelector('form.formrun').action = actionUrl
+    document.querySelector('#formrun_js_script').src = sourceUrl
+  };
+
+  const onloadEvent = () => {
+    loadLocalStorage();
+    document.querySelector('#embed_form_info').addEventListener('click', embedFormInfo);
+  };
+  window.addEventListener('load', onloadEvent);
+
+</script>
