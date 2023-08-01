@@ -23,7 +23,7 @@
 
 <body>
   <div class="row">
-    <div class="col-sm-6">
+    <div class="col-sm-8">
       <div class="card mb-3">
         <div class="card-body">
           <h2>
@@ -33,13 +33,17 @@
             <label>FormタグのactionのURL</label>
             <input name="action" type="text" class="form-control" id="action_url"
               placeholder="https://form.run/api/v1/r/fuomni12q5wpzyzprru3mas9">
+              <div class="small">現在の値：<span id="action_url_current"></span></div>
           </div>
 
-          <div class="form-group">
+
+          <div class="form-group mt-3">
             <label>スクリプト設置タグ</label>
             <input name="script" type="text" class="form-control" id="script_tag"
               placeholder="&lt;script src=&quot;https://sdk.form.run/js/v2/formrun.js&quot;&gt;&lt;/script&gt;">
+              <div class="small">現在の値：<span id="script_tag_current"></span></div>
           </div>
+
 
           <button class="btn btn-primary mt-3" id="embed_form_info">埋め込み</button>
         </div>
@@ -208,9 +212,11 @@
 
     document.querySelector('form.formrun').action = actionUrl
     document.querySelector('#action_url').value = actionUrl
+    document.querySelector('#action_url_current').textContent = actionUrl
 
     document.querySelector('#formrun_js_script').src = extractSourceUrl(script)
     document.querySelector('#script_tag').value = script
+    document.querySelector('#script_tag_current').textContent = script
 
   }
 
@@ -232,7 +238,9 @@
     window.localStorage.setItem(KEY_SCRIPT_TAG, scriptTag);
 
     document.querySelector('form.formrun').action = actionUrl
+    document.querySelector('#action_url_current').textContent = actionUrl
     document.querySelector('#formrun_js_script').src = sourceUrl
+    document.querySelector('#script_tag_current').textContent = scriptTag
   };
 
   const onloadEvent = () => {
