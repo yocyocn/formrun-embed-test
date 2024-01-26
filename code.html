@@ -1,5 +1,5 @@
 <html lang="ja">
-<meta name="referrer" content="unsafe-url">
+<meta name="referrer" content="unsafe-url" charset="utf-8">
 
 <head>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
@@ -13,7 +13,6 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
     integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
     crossorigin="anonymous"></script>
-  <script src="https://sdk-stg.form.run/js/v2/formrun.js"></script>
   <style>
     body {
       margin: 50px;
@@ -104,7 +103,8 @@
                   overflow: hidden;
                 }
               </style>
-              <label for="_formrun_gotcha" class="form-check-label">If you are a human, ignore this field</label>
+              <label for="_formrun_gotcha" class="form-check-label">If you are a human, ignore this
+                field</label>
               <input type="text" name="_formrun_gotcha" id="_formrun_gotcha" tabindex="-1" class="form-check-input">
             </div>
           </div>
@@ -127,7 +127,8 @@
               <label>電話番号の入力最大桁数を設定</label><span class="badge bg-secondary text-white">任意</span>
               <input name="電話番号バリデーション2" type="text" data-formrun-type="tel" data-formrun-chars-max="10"
                 class="form-control">
-              <div data-formrun-show-if-error="電話番号バリデーション2" class="text-danger">電話番号形式で入力してください（最大桁数は10桁です）</div>
+              <div data-formrun-show-if-error="電話番号バリデーション2" class="text-danger">
+                電話番号形式で入力してください（最大桁数は10桁です）</div>
             </div>
 
             <div class="form-group">
@@ -170,10 +171,9 @@
             </div>
 
             <div class="form-group">
-              <label>項目にエラーがない場合に要素を表示する(動作しない)</label><span class="badge bg-danger text-white">必須</span>
+              <label>項目にエラーがない場合に要素を表示する</label><span class="badge bg-danger text-white">必須</span>
               <input name="お名前3" type="text" class="form-control" data-formrun-required>
               <div data-formrun-show-if-success="お名前3" class="text-success">入力OK！</div>
-              <img src="" data-formrun-show-if-success="お名前3" />
               <div data-formrun-show-if-error="お名前3" class="text-danger">この項目は必須です</div>
             </div>
 
@@ -181,7 +181,8 @@
               <label>電話番号の入力最小桁数を設定</label><span class="badge bg-secondary text-white">任意</span>
               <input name="電話番号バリデーション3" type="text" data-formrun-type="tel" data-formrun-chars-min="4"
                 class="form-control">
-              <div data-formrun-show-if-error="電話番号バリデーション3" class="text-danger">電話番号形式で入力してください（最小桁数は5桁です）</div>
+              <div data-formrun-show-if-error="電話番号バリデーション3" class="text-danger">
+                電話番号形式で入力してください（最小桁数は5桁です）</div>
             </div>
 
           </div>
@@ -205,24 +206,40 @@
   const KEY_ACTION_URL = 'last_display_action_url';
   const KEY_SCRIPT_TAG = 'last_display_script_tag';
 
+  const addJsScriptTag = (url) => {
+    const oldScript = document.querySelector('#formrun_js_script')
+    if (oldScript) {
+      oldScript.remove();
+    }
+    const script = document.createElement('script');
+    script.src = url;
+    script.id = 'formrun_js_script';
+    document.head.appendChild(script);
+    const initFormrunJs = () => {
+      window.Formrun._reset();
+      window.Formrun.init('.formrun');
+    }
+    setTimeout(initFormrunJs, 1000);
+
+  }
 
   const loadLocalStorage = () => {
     const actionUrl = window.localStorage.getItem(KEY_ACTION_URL);
     const script = window.localStorage.getItem(KEY_SCRIPT_TAG);
     if (!actionUrl || !script) { return; }
 
-    document.querySelector('form.formrun').action = actionUrl
-    document.querySelector('#action_url').value = actionUrl
-    document.querySelector('#action_url_current').textContent = actionUrl
+    document.querySelector('form.formrun').action = actionUrl;
+    document.querySelector('#action_url').value = actionUrl;
+    document.querySelector('#action_url_current').textContent = actionUrl;
 
-    document.querySelector('#formrun_js_script').src = extractSourceUrl(script)
-    document.querySelector('#script_tag').value = script
-    document.querySelector('#script_tag_current').textContent = script
+    addJsScriptTag(extractSourceUrl(script));
+    document.querySelector('#script_tag').value = script;
+    document.querySelector('#script_tag_current').textContent = script;
 
   }
 
   const extractSourceUrl = (tag) => {
-    const sourceUrl = tag.match(/script src="(https:\/\/.+.formrun.js)"/);
+    const sourceUrl = tag.match(/script src="(https?:\/\/.+.formrun.js)"/);
     return !!sourceUrl ? sourceUrl[1] : null;
   }
 
@@ -238,10 +255,10 @@
     window.localStorage.setItem(KEY_ACTION_URL, actionUrl);
     window.localStorage.setItem(KEY_SCRIPT_TAG, scriptTag);
 
-    document.querySelector('form.formrun').action = actionUrl
-    document.querySelector('#action_url_current').textContent = actionUrl
-    document.querySelector('#formrun_js_script').src = sourceUrl
-    document.querySelector('#script_tag_current').textContent = scriptTag
+    document.querySelector('form.formrun').action = actionUrl;
+    document.querySelector('#action_url_current').textContent = actionUrl;
+    addJsScriptTag(sourceUrl);
+    document.querySelector('#script_tag_current').textContent = scriptTag;
   };
 
   const onloadEvent = () => {
