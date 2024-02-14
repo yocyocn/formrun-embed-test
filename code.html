@@ -18,8 +18,8 @@
       margin: 50px;
     }
   </style>
-  <title>code</title>
-  <link rel=”icon” href=“/image/favicon.ico”>
+  <title>コード型検証</title>
+  <link rel=”icon” href=“./image/favicon.ico”>
 </head>
 
 <body>
@@ -28,7 +28,7 @@
       <div class="card mb-3">
         <div class="card-body">
           <h2>
-            埋め込みに必要な情報
+            設置に必要な情報
           </h2>
           <div class="form-group">
             <label>FormタグのactionのURL</label>
@@ -46,7 +46,7 @@
           </div>
 
 
-          <button class="btn btn-primary mt-3" id="embed_form_info">埋め込み</button>
+          <button class="btn btn-secondary mt-3" id="embed_form_info">埋め込み</button>
         </div>
       </div>
     </div>
@@ -55,7 +55,7 @@
   <div class="row">
     <div class="col-sm-6">
       <h1>
-        コード型で埋め込み
+        コード型で設置
       </h1>
     </div>
   </div>
@@ -217,6 +217,9 @@
     script.id = 'formrun_js_script';
     document.head.appendChild(script);
     const initFormrunJs = () => {
+      if (!window.Formrun) {
+        return;
+      }
       window.Formrun._reset();
       window.Formrun.init('.formrun');
     }
@@ -258,13 +261,32 @@
 
     document.querySelector('form.formrun').action = actionUrl;
     document.querySelector('#action_url_current').textContent = actionUrl;
+    document.querySelector('#action_url_current').classList.remove('text-danger');
     addJsScriptTag(sourceUrl);
+
     document.querySelector('#script_tag_current').textContent = scriptTag;
-  };
+    document.querySelector('#script_tag_current').classList.remove('text-danger');
+    swapButtonClass('btn-primary', 'btn-secondary');
+  }
+
+  const swapButtonClass = (removeClass, addClass) => {
+    const embedButton = document.querySelector('#embed_form_info');
+    embedButton.classList.remove(removeClass);
+    embedButton.classList.add(addClass);
+  }
+
+  const changeDataEvent = (dataName) => {
+    document.querySelector(`#${dataName}`).addEventListener('input', () => {
+      swapButtonClass('btn-secondary', 'btn-primary');
+      document.querySelector(`#${dataName}_current`).classList.add('text-danger');
+    });
+  }
 
   const onloadEvent = () => {
     loadLocalStorage();
     document.querySelector('#embed_form_info').addEventListener('click', embedFormInfo);
+    changeDataEvent('action_url');
+    changeDataEvent('script_tag');
   };
   window.addEventListener('load', onloadEvent);
 

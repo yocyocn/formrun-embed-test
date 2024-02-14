@@ -19,7 +19,7 @@
     }
   </style>
   <title>div</title>
-  <link rel=”icon” href=“/image/favicon.ico”>
+  <link rel=”icon” href=“./image/favicon.ico”>
 </head>
 
 <body>
@@ -29,7 +29,7 @@
       <label for="script_area" class="form-label">スクリプト</label>
       <textarea class="form-control" id="script_area" rows="6"></textarea>
 
-      <button class="btn btn-primary mt-3" id="change_page_btn">更新</button>
+      <button class="btn btn-secondary mt-3" id="change_page_btn">更新</button>
     </div>
   </div>
 
@@ -100,11 +100,23 @@
     clearChildren(displayArea);
     appendScriptTag(displayArea, embedData.js_url);
     appendDivTag(displayArea, embedData.friendly_key);
+    swapButtonClass('btn-primary', 'btn-secondary');
+  }
+
+  const swapButtonClass = (removeClass, addClass) => {
+    const embedButton = document.querySelector('#change_page_btn');
+    embedButton.classList.remove(removeClass);
+    embedButton.classList.add(addClass);
+  }
+
+  const scriptChangeEvent = () => {
+    swapButtonClass('btn-secondary', 'btn-primary');
   }
 
   const onloadEvent = () => {
     loadLocalStorage();
     document.querySelector('#change_page_btn').addEventListener('click', replaceEmbedForm);
+    document.querySelector('#script_area').addEventListener('input', scriptChangeEvent);
   }
 
   window.addEventListener('load', onloadEvent);
