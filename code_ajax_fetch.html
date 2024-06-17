@@ -1,0 +1,263 @@
+<html lang="ja">
+<meta name="referrer" content="unsafe-url" charset="utf-8">
+
+<head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
+    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
+  <style>
+    body {
+      margin: 50px;
+    }
+
+    input[type="checkbox"] {
+      transform: scale(1.5);
+    }
+  </style>
+  <title>コード型で任意のthanksページに遷移する検証（fetch編）</title>
+  <link rel="shortcut icon" type="image/x-icon" href="./image/favicon.ico">
+</head>
+
+<body>
+  <div class="row">
+    <div class="col-sm-8">
+      <div class="card mb-3">
+        <div class="card-body">
+          <h2>
+            設置に必要な情報
+          </h2>
+          <div class="form-group">
+            <label>FormタグのactionのURL</label>
+            <input name="action" type="text" class="form-control" id="action_url"
+              placeholder="https://form.run/api/v1/r/fuomni12q5wpzyzprru3mas9">
+            <div class="small">現在の値：<span id="action_url_current"></span></div>
+          </div>
+
+
+          <div class="form-group mt-3">
+            <label>スクリプト設置タグ</label>
+            <input name="script" type="text" class="form-control" id="script_tag"
+              placeholder="&lt;script src=&quot;https://sdk.form.run/js/v2/formrun.js&quot;&gt;&lt;/script&gt;">
+            <div class="small">現在の値：<span id="script_tag_current"></span></div>
+          </div>
+
+          <div class="form-group mt-3">
+            <label>送信後遷移先URL</label>
+            <input name="script" type="text" class="form-control" id="thanks_url" placeholder="https://form.run/home">
+            <div class="small">現在の値：<span id="thanks_url_current"></span></div>
+          </div>
+
+
+          <button class="btn btn-secondary mt-3" id="embed_form_info">埋め込み</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-6">
+      <h1>
+        コード型で設置（Ajaxで送信）
+      </h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-6">
+      <form class="formrun" method="post" enctype="multipart/form-data" id="formrun_form_tag">
+
+        <div class="card mb-3">
+          <div class="card-body">
+
+            <h3>
+              コード設置画面サンプルコード
+            </h3>
+            <!-- ↓自由に要素を追加・編集することができます -->
+            <div class="form-group">
+              <label>お名前</label><span class="badge bg-secondary text-white">任意</span>
+              <input name="お名前1" type="text" class="form-control">
+            </div>
+
+            <div class="form-group">
+              <label>メールアドレス</label><span class="badge bg-danger text-white">必須</span>
+              <input name="メールアドレス1" type="text" data-formrun-type="email" class="form-control" data-formrun-required>
+              <div data-formrun-show-if-error="メールアドレス1" class="text-danger">メールアドレスを正しく入力してください</div>
+            </div>
+
+            <div class="form-group">
+              <label>お問い合わせ</label><span class="badge bg-danger text-white">必須</span>
+              <textarea name="お問い合わせ" class="form-control" data-formrun-required></textarea>
+              <div data-formrun-show-if-error="お問い合わせ" class="text-danger">お問い合わせ入力してください</div>
+            </div>
+
+            <div class="form-group form-group">
+              <div><label>個人情報利用同意</label><span class="badge bg-danger text-white">必須</span></div>
+              <input type="checkbox" name="個人情報利用同意" class="form-check-label" data-formrun-required id="agree_checkbox">
+              <label for="agree_checkbox">同意する</label>
+              <div data-formrun-show-if-error="個人情報利用同意" class="text-danger">同意してください</div>
+            </div>
+
+            <!-- ボット投稿をブロックするためのタグ -->
+            <div class="_formrun_gotcha form-group form-check">
+              <style media="screen">
+                ._formrun_gotcha {
+                  position: absolute !important;
+                  height: 1px;
+                  width: 1px;
+                  overflow: hidden;
+                }
+              </style>
+              <label for="_formrun_gotcha" class="form-check-label">If you are a human, ignore this
+                field</label>
+              <input type="text" name="_formrun_gotcha" id="_formrun_gotcha" tabindex="-1" class="form-check-input">
+            </div>
+          </div>
+        </div>
+
+        <button id="submit_button" type="button" class="btn btn-primary"
+          data-formrun-invalid-input-error-text="正しく入力されていない項目があります" data-formrun-error-text="未入力の項目があります"
+          data-formrun-submitting-text="送信中...">送信</button>
+      </form>
+    </div>
+  </div>
+</body>
+
+<script id="formrun_js_script"></script>
+
+<script>
+  const KEY_ACTION_URL = 'last_display_action_url';
+  const KEY_SCRIPT_TAG = 'last_display_script_tag';
+  const KEY_THANKS_URL = 'last_display_thanks_url';
+
+  const addJsScriptTag = (url) => {
+    const oldScript = document.querySelector('#formrun_js_script')
+    if (oldScript) {
+      oldScript.remove();
+    }
+    const script = document.createElement('script');
+    script.src = url;
+    script.id = 'formrun_js_script';
+    document.head.appendChild(script);
+    const initFormrunJs = () => {
+      if (!window.Formrun) {
+        return;
+      }
+      window.Formrun._reset();
+      window.Formrun.init('.formrun');
+    }
+    setTimeout(initFormrunJs, 1000);
+
+  }
+
+  const loadLocalStorage = () => {
+    const actionUrl = window.localStorage.getItem(KEY_ACTION_URL);
+    const script = window.localStorage.getItem(KEY_SCRIPT_TAG);
+    const thanksUrl = window.localStorage.getItem(KEY_THANKS_URL);
+    if (!actionUrl || !script || !thanksUrl) { return; }
+
+    document.querySelector('form.formrun').action = actionUrl;
+    document.querySelector('#action_url').value = actionUrl;
+    document.querySelector('#action_url_current').textContent = actionUrl;
+
+    addJsScriptTag(extractSourceUrl(script));
+    document.querySelector('#script_tag').value = script;
+    document.querySelector('#script_tag_current').textContent = script;
+
+
+    document.querySelector('#thanks_url').value = thanksUrl;
+    document.querySelector('#thanks_url_current').textContent = thanksUrl;
+  }
+
+  const extractSourceUrl = (tag) => {
+    const sourceUrl = tag.match(/script src="(https?:\/\/.+.formrun.js)"/);
+    return !!sourceUrl ? sourceUrl[1] : null;
+  }
+
+  const embedFormInfo = () => {
+    const actionUrl = document.querySelector('#action_url').value;
+    const scriptTag = document.querySelector('#script_tag').value;
+    const thanksUrl = document.querySelector('#thanks_url').value;
+    const sourceUrl = extractSourceUrl(scriptTag);
+
+    if (!sourceUrl) {
+      window.alert('不正なスクリプトです');
+      return;
+    }
+    window.localStorage.setItem(KEY_ACTION_URL, actionUrl);
+    window.localStorage.setItem(KEY_SCRIPT_TAG, scriptTag);
+    window.localStorage.setItem(KEY_THANKS_URL, thanksUrl);
+
+    document.querySelector('form.formrun').action = actionUrl;
+    document.querySelector('#action_url_current').textContent = actionUrl;
+    document.querySelector('#action_url_current').classList.remove('text-danger');
+    addJsScriptTag(sourceUrl);
+
+    document.querySelector('#script_tag_current').textContent = scriptTag;
+    document.querySelector('#script_tag_current').classList.remove('text-danger');
+    swapButtonClass('btn-primary', 'btn-secondary');
+
+
+    document.querySelector('#thanks_url_current').textContent = thanksUrl;
+  }
+
+  const swapButtonClass = (removeClass, addClass) => {
+    const embedButton = document.querySelector('#embed_form_info');
+    embedButton.classList.remove(removeClass);
+    embedButton.classList.add(addClass);
+  }
+
+  const changeDataEvent = (dataName) => {
+    document.querySelector(`#${dataName}`).addEventListener('input', () => {
+      swapButtonClass('btn-secondary', 'btn-primary');
+      document.querySelector(`#${dataName}_current`).classList.add('text-danger');
+    });
+  }
+
+  const setSubmitEvent = () => {
+    const targetForm = document.querySelector('#formrun_form_tag');
+    const ajaxAndRedirectPage = (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(targetForm);
+
+      const options = {
+        method: 'POST',
+        body: new FormData(targetForm)
+      };
+
+      fetch(targetForm.action, options)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+          }
+          return response.json(); // JSON形式のレスポンスをパース
+        })
+        .then(data => {
+          window.location.href = document.querySelector('#thanks_url').value;
+        })
+        .catch(error => {
+          window.alert('There was a problem with the fetch operation:', error);
+        });
+    }
+
+    document.querySelector('#submit_button').addEventListener('click', ajaxAndRedirectPage);
+  }
+
+  const onloadEvent = () => {
+    loadLocalStorage();
+    document.querySelector('#embed_form_info').addEventListener('click', embedFormInfo);
+    changeDataEvent('action_url');
+    changeDataEvent('script_tag');
+    setSubmitEvent();
+  };
+  window.addEventListener('load', onloadEvent);
+
+</script>
