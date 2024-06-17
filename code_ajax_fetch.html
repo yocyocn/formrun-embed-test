@@ -72,7 +72,7 @@
 
   <div class="row">
     <div class="col-sm-6">
-      <form class="formrun" method="post" enctype="multipart/form-data" id="formrun_form_tag">
+      <form class="formrun" method="post" id="formrun_form_tag">
 
         <div class="card mb-3">
           <div class="card-body">
@@ -230,7 +230,7 @@
 
       const options = {
         method: 'POST',
-        body: new FormData(targetForm)
+        body: new FormData(targetForm),
       };
 
       fetch(targetForm.action, options)
